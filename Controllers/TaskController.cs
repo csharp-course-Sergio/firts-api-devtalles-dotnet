@@ -38,4 +38,17 @@ public class TaskController : ControllerBase
         TaskDataStore.Current.Tasks.Add(newTask);
         return Ok(newTask);
     }
+
+    [HttpPut("{id}")]
+    public ActionResult<Models.Task> UpdateTask(int id, Models.TaskInsert taskUpdate)
+    {
+        var existingTask = TaskDataStore.Current.Tasks.FirstOrDefault(t => t.Id == id);
+        if (existingTask == null) return NotFound("Task not found.");
+
+        existingTask.Title = taskUpdate.Title;
+        existingTask.Description = taskUpdate.Description;
+        existingTask.UpdatedAt = DateTime.Now;
+
+        return Ok(existingTask);
+    }
 }
